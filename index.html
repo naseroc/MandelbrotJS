@@ -158,8 +158,8 @@ function colores(x,maxIt){
 	ctx = canvas.getContext('2d');
 	for (var i = 0; i < 1000; i++){
 		for (var j=0; j < 1000; j++) {
-			ctx.fillStyle = divergencia(i/1000,j/1000,iteraciones); //Es una cuadrícula de 500x500 donde cada cuadrado es de 1x1 px
-			//console.log(divergencia(i/250,j/250,6000))
+			ctx.fillStyle = divergencia(i/1000,j/1000,iteraciones); 
+			//Es una cuadrícula de 1000x1000 donde cada cuadrado es de 1x1 px
 			ctx.fillRect(i,j,1,1);
 		}
 	}
