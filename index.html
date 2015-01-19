@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mandelbrot Versión 0.0001</title>
+	<meta charset="utf-8">
+		<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+	</script>
+	<script type="text/javascript"
+	  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+	<script type="text/javascript" src="complex.js"></script>
+	<script type="text/javascript" src="sucesion.js"></script>
+
+	
+</head>
+<body>
+<div class="container">
+	<section id="generador">
+	<header>
+		<div class="page-header">
+  		<h1>Fractal de Mendelbrot <small>Al borde del abismo infinito</small></h1>
+		</div>
+	</header>
+	<div class="row">
+	<div class="col-md-7">
+	<canvas id="fractal" width="650px" height="650px">
+		no eres compatible con esta tecnología <br>
+		Usa Firefox, Chrome o Safari.
+	</canvas>
+	</div>
+	<div class="col-md-5">
+		<div class="panel panel-danger">
+		<div class="panel-heading">
+		    <h3 class="panel-title">DEFINICIÓN</h3>
+		</div>
+		<div class="panel-body">
+		<p>El Fractal de <i>Mandelbrot</i> se define como el conjunto de todos los puntos $C$ complejos tales que,
+		dada la regla de recursividad
+		\[\left\lbrace\begin{align}
+		z_0 &= 0\\
+		z_{n+1} &= z_n + C.
+		\end{align}\right.\]
+		esta converge.
+		</p>
+
+		
+
+		<h4>Algoritmo de tiempo de escape</h4>
+		<p>
+		Para simplificar el cálculo de la convergencia consideraremos un número finito de iteraciones y además
+	 	asumiremos que la secuencia diverge cuando hallamos algún $z_n$ tal que $|z_n| > 2$, o lo que es equivalente
+
+	 	\[|z_n|^2 > 4\]
+
+		Se representará cada punto del plano de Agrant con un color dependiendo del número de iteraciones que se requirieron para llegar a:
+
+		\[|z_n|^2 > 4\]
+
+		</p>
+		<p>
+		Ingresa el número de iteraciones a realizar. Te recomendamos comenzar con un número pequeño.<br>
+		<center>  
+				<button type="button" class="btn btn-danger" onclick="pintar(document.getElementById('pasos').value)">Generar Fractal</button> <input type="text" id="pasos" value="10"/>
+		</center>
+		</p>
+		</div>
+		</div>
+
+
+	</div>
+	</div>
+	</section>
+	<section id="elcodigo">
+	<header>
+		<div class="page-header">
+  		<h1>Fractal de Mendelbrot <small>El código en JS</small></h1>
+		</div>
+	</header>
+	<div class="row">
+	<div class="col-md-9">
+	<div class="well">
+	<xmp>
+	
+function colores(x,maxIt){
+	if(maxIt*0.8<x){ // Cuando la divergencia nunca se alcanza en la iteración, el color es negro.
+		return '#000000';
+
+	}
+	if(maxIt*0.6<=x && x < maxIt*0.8){ //Entre el 
+		return '#FFFFFF';
+		
+	}
+	else if(maxIt*0.4<=x && x<maxIt*0.6){ //Cuando
+		return '#E0E0E0';
+		
+	}
+	else if(maxIt*0.2<=x && x<maxIt*0.4){ //Cuando
+		return '#FF0000';
+		
+	}
+	else if(x<maxIt*0.2){ //Cuando
+		return '#CC0000';
+		
+	}
+	else{
+		return '#990000';
+	}
+}
+	</xmp>
+	</div>
+	
+	<div class="well">
+	<xmp>
+	function divergencia(p,q,max){
+	var z0 = new Complex(0,0); // z_0
+	var c = new Complex;
+	c.x = p;
+	c.y = q;
+	var zn = new Complex;
+	var zn = c //z_n
+	var znM1 = new Complex; //z_{n+1}
+	var count = 0; //Contador de iteraciones
+	var maxIt = max; // Máximo de iteraciones
+
+	for (var p = 0; p <= maxIt; p++) {
+		if(zn.abs()>2){
+			return colores(count,maxIt);
+			break;
+		}
+		else if (p < maxIt){
+			znM1 = (zn.mul(zn)).add(c);
+			zn = znM1; 
+			count = count + 1;
+		}
+		else{
+			return colores(count,maxIt);
+		}
+	};
+}
+
+	
+	</xmp>
+	</div>
+
+	<div class="well">
+	<xmp>
+	function pintar(iteraciones){
+	canvas = document.getElementById('fractal');
+	ctx = canvas.getContext('2d');
+	for (var i = 0; i < 1000; i++){
+		for (var j=0; j < 1000; j++) {
+			ctx.fillStyle = divergencia(i/1000,j/1000,iteraciones); //Es una cuadrícula de 500x500 donde cada cuadrado es de 1x1 px
+			//console.log(divergencia(i/250,j/250,6000))
+			ctx.fillRect(i,j,1,1);
+		}
+	}
+}
+
+	</xmp>
+	</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-info">
+		<div class="panel-heading">
+		    <h3 class="panel-title">LA LÓGICA</h3>
+		</div>
+		<div class="panel-body">
+	
+		</div>
+		</div>
+
+
+	</div>
+	</div>
+	</section>
+</div>
+
+</body>
+</html>
